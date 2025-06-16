@@ -47,7 +47,16 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
               .eq('id', session.user.id)
               .single();
             
-            setProfile(profileData);
+            if (profileData) {
+              setProfile({
+                id: profileData.id,
+                email: profileData.email || '',
+                full_name: profileData.full_name || '',
+                role: (profileData.role as 'admin' | 'ayudante' | 'visitante') || 'visitante',
+                profession: profileData.profession || '',
+                avatar_url: profileData.avatar_url || ''
+              });
+            }
             setLoading(false);
           }, 0);
         } else {

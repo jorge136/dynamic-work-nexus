@@ -11,6 +11,7 @@ import { WorkSpaces } from "@/components/WorkSpaces";
 import { ToolsConsole } from "@/components/ToolsConsole";
 import { ProfessionCenter } from "@/components/ProfessionCenter";
 import { UserProfile } from "@/components/UserProfile";
+import { TestCredentials } from "@/components/TestCredentials";
 
 const Index = () => {
   const { user, loading } = useAuth();
@@ -45,6 +46,8 @@ const Index = () => {
         return <ToolsConsole />;
       case "profile":
         return <UserProfile />;
+      case "credentials":
+        return <TestCredentials />;
       default:
         return <Dashboard />;
     }

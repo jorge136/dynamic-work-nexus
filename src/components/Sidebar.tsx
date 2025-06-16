@@ -8,7 +8,8 @@ import {
   Home,
   Plus,
   Briefcase,
-  User
+  User,
+  Key
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
@@ -27,6 +28,7 @@ const menuItems = [
   { id: "workspaces", label: "Espacios de Trabajo", icon: Users },
   { id: "tools", label: "Herramientas Pro", icon: Settings },
   { id: "profile", label: "Mi Perfil", icon: User },
+  { id: "credentials", label: "Credenciales de Prueba", icon: Key },
 ];
 
 export const Sidebar = ({ activeModule, onModuleChange, isOpen }: SidebarProps) => {

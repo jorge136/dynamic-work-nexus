@@ -1,149 +1,223 @@
 
-import { Calendar, Clock, Users, TrendingUp, ArrowUp, ArrowDown } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Progress } from "@/components/ui/progress";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { useAuth } from "@/hooks/useAuth";
+import { Users, Briefcase, Settings, TrendingUp, Shield, Eye } from "lucide-react";
 
 export const Dashboard = () => {
+  const { profile } = useAuth();
+
+  const getRoleIcon = () => {
+    if (!profile) return <Eye className="h-5 w-5" />;
+    switch (profile.role) {
+      case 'admin': return <Shield className="h-5 w-5 text-blue-600" />;
+      case 'ayudante': return <Users className="h-5 w-5 text-green-600" />;
+      default: return <Eye className="h-5 w-5 text-slate-600" />;
+    }
+  };
+
+  const getRoleName = () => {
+    if (!profile) return 'Cargando...';
+    switch (profile.role) {
+      case 'admin': return 'Administrador';
+      case 'ayudante': return 'Ayudante';
+      default: return 'Visitante';
+    }
+  };
+
   const stats = [
     {
       title: "Proyectos Activos",
       value: "12",
-      change: "+2",
-      trend: "up",
-      icon: Calendar,
-      color: "blue"
+      description: "Proyectos en desarrollo",
+      icon: <Briefcase className="h-6 w-6 text-blue-600" />,
+      trend: "+2 este mes"
     },
     {
-      title: "Horas Trabajadas",
+      title: "Profesionales",
+      value: "48",
+      description: "Usuarios registrados",
+      icon: <Users className="h-6 w-6 text-green-600" />,
+      trend: "+8 nuevos"
+    },
+    {
+      title: "Servicios",
       value: "156",
-      change: "+24",
-      trend: "up",
-      icon: Clock,
-      color: "green"
+      description: "Servicios disponibles",
+      icon: <Settings className="h-6 w-6 text-purple-600" />,
+      trend: "+12 agregados"
     },
     {
-      title: "Colaboradores",
-      value: "28",
-      change: "+5",
-      trend: "up",
-      icon: Users,
-      color: "purple"
-    },
-    {
-      title: "Servicios Vendidos",
-      value: "$12,400",
-      change: "-8%",
-      trend: "down",
-      icon: TrendingUp,
-      color: "orange"
+      title: "Actividad",
+      value: "94%",
+      description: "Tasa de actividad",
+      icon: <TrendingUp className="h-6 w-6 text-orange-600" />,
+      trend: "+5% vs mes pasado"
     }
   ];
 
-  const recentProjects = [
-    { name: "App E-commerce", progress: 75, team: "Frontend + Backend", deadline: "15 Mar" },
-    { name: "Campaña Marketing", progress: 90, team: "Marketing + Diseño", deadline: "10 Mar" },
-    { name: "Sistema Contable", progress: 45, team: "Backend + Contabilidad", deadline: "25 Mar" },
+  const recentActivities = [
+    { action: "Nuevo proyecto creado", user: "María García", time: "Hace 2 horas", type: "project" },
+    { action: "Usuario registrado", user: "Carlos López", time: "Hace 4 horas", type: "user" },
+    { action: "Servicio actualizado", user: "Ana Martín", time: "Hace 6 horas", type: "service" },
+    { action: "Proyecto completado", user: "Luis Rodríguez", time: "Hace 1 día", type: "completion" }
   ];
 
   return (
     <div className="space-y-6">
+      {/* Header con información del usuario */}
       <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold text-slate-900">Dashboard Inteligente</h1>
-        <p className="text-slate-600">Bienvenido de vuelta, Juan Desarrollador</p>
+        <div>
+          <h1 className="text-3xl font-bold text-slate-900">
+            ¡Bienvenido, {profile?.full_name || 'Usuario'}!
+          </h1>
+          <div className="flex items-center gap-2 mt-2">
+            {getRoleIcon()}
+            <span className="text-slate-600">Rol: {getRoleName()}</span>
+            {profile?.profession && (
+              <>
+                <span className="text-slate-400">•</span>
+                <span className="text-slate-600">{profile.profession}</span>
+              </>
+            )}
+          </div>
+        </div>
+        <Badge variant="outline" className="flex items-center gap-2">
+          {getRoleIcon()}
+          {getRoleName()}
+        </Badge>
       </div>
 
-      {/* Stats Grid */}
+      {/* Estadísticas principales */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {stats.map((stat, index) => {
-          const Icon = stat.icon;
-          return (
-            <Card key={index} className="hover:shadow-lg transition-shadow duration-200">
-              <CardContent className="p-6">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm font-medium text-slate-600 mb-1">{stat.title}</p>
-                    <p className="text-2xl font-bold text-slate-900">{stat.value}</p>
-                    <div className="flex items-center mt-2">
-                      {stat.trend === "up" ? (
-                        <ArrowUp className="h-4 w-4 text-green-500" />
-                      ) : (
-                        <ArrowDown className="h-4 w-4 text-red-500" />
-                      )}
-                      <span className={`text-sm ml-1 ${
-                        stat.trend === "up" ? "text-green-600" : "text-red-600"
-                      }`}>
-                        {stat.change}
-                      </span>
-                    </div>
-                  </div>
-                  <div className={`p-3 rounded-lg bg-${stat.color}-100`}>
-                    <Icon className={`h-6 w-6 text-${stat.color}-600`} />
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          );
-        })}
+        {stats.map((stat, index) => (
+          <Card key={index}>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium text-slate-600">
+                {stat.title}
+              </CardTitle>
+              {stat.icon}
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold text-slate-900">{stat.value}</div>
+              <p className="text-xs text-slate-500">{stat.description}</p>
+              <div className="text-xs text-green-600 mt-1">{stat.trend}</div>
+            </CardContent>
+          </Card>
+        ))}
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Recent Projects */}
-        <Card>
+      {/* Sección principal */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Actividad reciente */}
+        <Card className="lg:col-span-2">
           <CardHeader>
-            <CardTitle>Proyectos Recientes</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            {recentProjects.map((project, index) => (
-              <div key={index} className="space-y-2">
-                <div className="flex justify-between items-center">
-                  <h4 className="font-medium text-slate-900">{project.name}</h4>
-                  <span className="text-sm text-slate-600">{project.deadline}</span>
-                </div>
-                <p className="text-sm text-slate-600">{project.team}</p>
-                <Progress value={project.progress} className="h-2" />
-                <p className="text-xs text-slate-500">{project.progress}% completado</p>
-              </div>
-            ))}
-          </CardContent>
-        </Card>
-
-        {/* AI Assistant */}
-        <Card>
-          <CardHeader>
-            <CardTitle>🤖 Asistente IA</CardTitle>
+            <CardTitle>Actividad Reciente</CardTitle>
+            <CardDescription>
+              Últimas acciones en la plataforma
+            </CardDescription>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              <div className="p-4 bg-blue-50 rounded-lg">
-                <p className="text-sm text-blue-800 mb-2">
-                  <strong>Recomendación:</strong> El proyecto "App E-commerce" necesita revisión de seguridad antes del deploy.
-                </p>
-                <button className="text-xs text-blue-600 hover:underline">
-                  Ver detalles →
-                </button>
-              </div>
-              
-              <div className="p-4 bg-green-50 rounded-lg">
-                <p className="text-sm text-green-800 mb-2">
-                  <strong>Automatización:</strong> Se generó el reporte semanal de productividad.
-                </p>
-                <button className="text-xs text-green-600 hover:underline">
-                  Descargar PDF →
-                </button>
-              </div>
-
-              <div className="p-4 bg-purple-50 rounded-lg">
-                <p className="text-sm text-purple-800 mb-2">
-                  <strong>Oportunidad:</strong> Nueva demanda de servicios de React en el marketplace.
-                </p>
-                <button className="text-xs text-purple-600 hover:underline">
-                  Explorar →
-                </button>
-              </div>
+              {recentActivities.map((activity, index) => (
+                <div key={index} className="flex items-center space-x-4 border-b border-slate-100 pb-3 last:border-0">
+                  <div className={`w-2 h-2 rounded-full ${
+                    activity.type === 'project' ? 'bg-blue-500' :
+                    activity.type === 'user' ? 'bg-green-500' :
+                    activity.type === 'service' ? 'bg-purple-500' : 'bg-orange-500'
+                  }`} />
+                  <div className="flex-1">
+                    <p className="text-sm font-medium text-slate-900">{activity.action}</p>
+                    <p className="text-xs text-slate-500">{activity.user} • {activity.time}</p>
+                  </div>
+                </div>
+              ))}
             </div>
           </CardContent>
         </Card>
+
+        {/* Acciones rápidas */}
+        <Card>
+          <CardHeader>
+            <CardTitle>Acciones Rápidas</CardTitle>
+            <CardDescription>
+              Accesos directos a funciones principales
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            <Button className="w-full justify-start" variant="outline">
+              <Briefcase className="h-4 w-4 mr-2" />
+              Crear Proyecto
+            </Button>
+            <Button className="w-full justify-start" variant="outline">
+              <Users className="h-4 w-4 mr-2" />
+              Buscar Profesionales
+            </Button>
+            <Button className="w-full justify-start" variant="outline">
+              <Settings className="h-4 w-4 mr-2" />
+              Configurar Perfil
+            </Button>
+            <Button className="w-full justify-start" variant="outline">
+              <TrendingUp className="h-4 w-4 mr-2" />
+              Ver Estadísticas
+            </Button>
+          </CardContent>
+        </Card>
       </div>
+
+      {/* Panel informativo según el rol */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Panel de {getRoleName()}</CardTitle>
+          <CardDescription>
+            Información específica para tu rol en la plataforma
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          {profile?.role === 'admin' && (
+            <div className="space-y-3">
+              <p className="text-sm text-slate-600">
+                Como administrador, tienes acceso completo a todas las funciones de la plataforma:
+              </p>
+              <ul className="text-sm text-slate-600 space-y-1 ml-4">
+                <li>• Gestión completa de usuarios y roles</li>
+                <li>• Configuración del sistema</li>
+                <li>• Acceso a todas las estadísticas</li>
+                <li>• Moderación de contenido</li>
+              </ul>
+            </div>
+          )}
+          
+          {profile?.role === 'ayudante' && (
+            <div className="space-y-3">
+              <p className="text-sm text-slate-600">
+                Como ayudante, puedes asistir en la gestión de la plataforma:
+              </p>
+              <ul className="text-sm text-slate-600 space-y-1 ml-4">
+                <li>• Ayudar a usuarios con dudas</li>
+                <li>• Moderar contenido básico</li>
+                <li>• Crear y gestionar proyectos</li>
+                <li>• Acceso a herramientas específicas</li>
+              </ul>
+            </div>
+          )}
+          
+          {profile?.role === 'visitante' && (
+            <div className="space-y-3">
+              <p className="text-sm text-slate-600">
+                Como visitante, puedes explorar y usar las funciones básicas:
+              </p>
+              <ul className="text-sm text-slate-600 space-y-1 ml-4">
+                <li>• Explorar profesiones y servicios</li>
+                <li>• Conectar con otros profesionales</li>
+                <li>• Participar en proyectos</li>
+                <li>• Actualizar tu perfil profesional</li>
+              </ul>
+            </div>
+          )}
+        </CardContent>
+      </Card>
     </div>
   );
 };
