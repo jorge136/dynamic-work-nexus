@@ -6,9 +6,12 @@ import {
   Search, 
   Settings,
   Home,
-  Plus
+  Plus,
+  Briefcase,
+  User
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/hooks/useAuth";
 
 interface SidebarProps {
   activeModule: string;
@@ -19,12 +22,16 @@ interface SidebarProps {
 const menuItems = [
   { id: "dashboard", label: "Dashboard", icon: Home },
   { id: "projects", label: "Centro de Proyectos", icon: Folder },
+  { id: "professions", label: "Profesiones", icon: Briefcase },
   { id: "marketplace", label: "Marketplace", icon: Search },
   { id: "workspaces", label: "Espacios de Trabajo", icon: Users },
   { id: "tools", label: "Herramientas Pro", icon: Settings },
+  { id: "profile", label: "Mi Perfil", icon: User },
 ];
 
 export const Sidebar = ({ activeModule, onModuleChange, isOpen }: SidebarProps) => {
+  const { profile } = useAuth();
+
   if (!isOpen) return null;
 
   return (
@@ -55,10 +62,22 @@ export const Sidebar = ({ activeModule, onModuleChange, isOpen }: SidebarProps) 
           })}
         </nav>
 
-        <div className="mt-8 p-4 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg">
+        {profile && (
+          <div className="mt-8 p-4 bg-gradient-to-r from-green-50 to-blue-50 rounded-lg">
+            <h3 className="font-semibold text-slate-900 mb-2">👤 {profile.full_name}</h3>
+            <p className="text-sm text-slate-700 mb-1">
+              {profile.profession || 'Sin profesión'}
+            </p>
+            <p className="text-xs text-slate-600 capitalize">
+              Rol: {profile.role}
+            </p>
+          </div>
+        )}
+
+        <div className="mt-4 p-4 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg">
           <h3 className="font-semibold text-blue-900 mb-2">💡 Tip del día</h3>
           <p className="text-sm text-blue-700">
-            Usa el asistente IA para automatizar reportes de progreso de tus proyectos.
+            Explora las diferentes profesiones y sus subáreas para encontrar nuevas oportunidades.
           </p>
         </div>
       </div>
