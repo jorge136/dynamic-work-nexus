@@ -155,12 +155,12 @@ export const ProfessionCenter = () => {
                             >
                               {tool}
                             </Badge>
-                          ))}
+                         ))}
                         </div>
                       </div>
                     </CardContent>
                   </Card>
-                ))}
+               ))}
               </div>
 
               {professionSubAreas.length === 0 && (

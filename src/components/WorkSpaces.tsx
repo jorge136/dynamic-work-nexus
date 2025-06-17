@@ -164,7 +164,7 @@ export const WorkSpaces = () => {
                         {member.name.split(' ').map(n => n[0]).join('')}
                       </AvatarFallback>
                     </Avatar>
-                  ))}
+                 ))}
                   {workspace.members.length > 4 && (
                     <div className="flex items-center justify-center h-8 w-8 rounded-full bg-slate-100 border-2 border-white text-xs font-medium text-slate-600">
                       +{workspace.members.length - 4}
@@ -187,7 +187,7 @@ export const WorkSpaces = () => {
               </div>
             </CardContent>
           </Card>
-        ))}
+       ))}
       </div>
     </div>
   );

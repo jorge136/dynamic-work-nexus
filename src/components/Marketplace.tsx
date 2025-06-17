@@ -100,7 +100,7 @@ export const Marketplace = () => {
               <p className="text-sm text-slate-600">{category.count} servicios</p>
             </CardContent>
           </Card>
-        ))}
+       ))}
       </div>
 
       {/* Services Grid */}
@@ -136,7 +136,7 @@ export const Marketplace = () => {
                   <Badge key={index} variant="outline" className="text-xs">
                     {skill}
                   </Badge>
-                ))}
+               ))}
               </div>
 
               <div className="flex items-center justify-between text-sm">
@@ -159,7 +159,7 @@ export const Marketplace = () => {
               </div>
             </CardContent>
           </Card>
-        ))}
+       ))}
       </div>
     </div>
   );

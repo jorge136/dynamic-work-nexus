@@ -105,7 +105,7 @@ export const Dashboard = () => {
               <div className="text-xs text-green-600 mt-1">{stat.trend}</div>
             </CardContent>
           </Card>
-        ))}
+       ))}
       </div>
 
       {/* Sección principal */}
@@ -132,7 +132,7 @@ export const Dashboard = () => {
                     <p className="text-xs text-slate-500">{activity.user} • {activity.time}</p>
                   </div>
                 </div>
-              ))}
+             ))}
             </div>
           </CardContent>
         </Card>

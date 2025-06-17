@@ -127,7 +127,7 @@ export const ProjectCenter = () => {
                     <Badge key={index} variant="secondary" className="text-xs">
                       {member}
                     </Badge>
-                  ))}
+                 ))}
                 </div>
               </div>
 
@@ -146,7 +146,7 @@ export const ProjectCenter = () => {
               </Button>
             </CardContent>
           </Card>
-        ))}
+       ))}
       </div>
     </div>
   );

@@ -98,7 +98,7 @@ export const ToolsConsole = () => {
               </p>
             </CardContent>
           </Card>
-        ))}
+       ))}
       </div>
 
       {/* Tools Grid */}
@@ -138,7 +138,7 @@ export const ToolsConsole = () => {
                         <div className="w-1 h-1 bg-blue-600 rounded-full mr-2"></div>
                         {feature}
                       </div>
-                    ))}
+                   ))}
                   </div>
                 </div>
 
